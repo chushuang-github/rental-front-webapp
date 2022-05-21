@@ -2,7 +2,7 @@
 function formatCityData(list) {
   const cityList = {}
   list.forEach(item => {
-    const first = item.short.substr(0, 1)
+    const first = item.short.substr(0, 1).toUpperCase()
     if(cityList[first]) {
       cityList[first].push(item)
     }else {
