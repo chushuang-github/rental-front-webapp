@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { Swiper, Image, Grid  } from 'antd-mobile'
+import SearchHeader from '../../components/SearchHeader'
 import axios from 'axios'
 import Nav1 from '../../assets/images/nav-1.png'
 import Nav2 from '../../assets/images/nav-2.png'
 import Nav3 from '../../assets/images/nav-3.png'
 import Nav4 from '../../assets/images/nav-4.png'
 import { getCurrentCity } from '../../utils/get-current-city'
+import { BASE_URL } from '../../utils/url'
 import './index.scss'
 
 const navs = [
@@ -80,32 +82,18 @@ export default class Index extends Component {
 
   render() {
     const { swipers, groups, news, currentCityName } = this.state
+    const { history } = this.props
     return (
       <div>
         <div style={{ position: 'relative' }}>
-          <div className='navbar'>
-            <div className='search'>
-              <div className="location" onClick={() => this.props.history.push('/citylist')}>
-                <span className="name">{currentCityName}</span>
-                <i className="iconfont icon-arrow" />
-              </div>
-              <div className="form" onClick={() => this.props.history.push('/search')}>
-                <i className="iconfont icon-seach" />
-                <span className="text">请输入小区或地址</span>
-              </div>
-            </div>
-            <i
-              className="iconfont icon-map"
-              onClick={() => this.props.history.push('/map')}
-            />
-          </div>
+          <SearchHeader cityName={currentCityName} />
           {
             swipers.length > 0 && (
               <Swiper loop autoplay autoplayInterval={5000}>
                 {
                   swipers.map(item => (
                     <Swiper.Item key={item.id}>
-                      <Image src={`http://localhost:8080${item.imgSrc}`} alt={item.alt} fit="cover" />
+                      <Image src={`${BASE_URL}${item.imgSrc}`} alt={item.alt} fit="cover" />
                     </Swiper.Item>
                   ))
                 }
@@ -117,7 +105,7 @@ export default class Index extends Component {
         <Grid columns={4} className="nav">
           {
             navs.map(item => (
-              <Grid.Item key={item.id} onClick={() => this.props.history.push(item.path)}>
+              <Grid.Item key={item.id} onClick={() => history.push(item.path)}>
                 <img src={item.img} alt="" />
                 <h2>{item.title}</h2>
               </Grid.Item>
@@ -139,7 +127,7 @@ export default class Index extends Component {
                       <div className='desc'>{item.desc}</div>
                     </div>
                   </div>
-                  <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+                  <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
                 </Grid.Item>
               ))
             }
@@ -153,7 +141,7 @@ export default class Index extends Component {
           {
             news.map(item => (
               <div key={item.id} className='news-item'>
-                <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+                <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
                 <div className='news-info'>
                   <h2 className='title'>{item.title}</h2>
                   <div className='content'>

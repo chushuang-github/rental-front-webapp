@@ -3,6 +3,7 @@ import NavHeader from '../../components/NavHeader'
 import { Link } from 'react-router-dom'
 import { Toast } from 'antd-mobile'
 import axios from 'axios'
+import { BASE_URL } from '../../utils/url'
 import './index.scss'
 
 // 覆盖物样式
@@ -23,6 +24,9 @@ export default class Map extends Component {
   }
   componentDidMount() {
     this.initMap()
+  }
+  componentWillUnmount() {
+    Toast.clear()
   }
 
   // 初始化地图
@@ -263,7 +267,7 @@ export default class Map extends Component {
                   <div className='imgWrap'>
                     <img
                       className='img'
-                      src={`http://localhost:8080${item.houseImg}`}
+                      src={`${BASE_URL}${item.houseImg}`}
                       alt=""
                     />
                   </div>

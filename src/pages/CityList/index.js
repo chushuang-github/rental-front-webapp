@@ -14,6 +14,9 @@ export default class CityList extends Component {
   componentDidMount() {
     this.getCityList()
   }
+  componentWillUnmount() {
+    Toast.clear()
+  }
   // 获取城市列表数据：当前城市 + 热门城市 + 所有城市
   getCityList = async () => {
     Toast.show({
