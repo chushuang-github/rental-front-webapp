@@ -1,0 +1,20 @@
+.filter {
+  position: relative;
+  z-index: 300;
+  height: 40px;
+  .mask {
+    position: fixed;
+    z-index: 200;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .content {
+    position: absolute;
+    z-index: 300;
+    width: 100%;
+    background-color: #fff;
+  }
+}

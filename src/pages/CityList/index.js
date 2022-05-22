@@ -48,7 +48,7 @@ export default class CityList extends Component {
     const arr = ['北京', '广州', '上海', '深圳']
     if(arr.includes(label)) {
       localStorage.setItem('hkzf_city', JSON.stringify({label, value}))
-      this.props.history.replace('/home')
+      this.props.history.go(-1)
     }else {
       Toast.show({
         content: "该城市暂无房源数据",

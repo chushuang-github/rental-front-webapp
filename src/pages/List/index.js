@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import SearchHeader from '../../components/SearchHeader'
 import { getCurrentCity } from '../../utils/get-current-city'
+import Filter from './components/Filter'
 import './index.scss'
 
 export default class List extends Component {
@@ -23,6 +24,7 @@ export default class List extends Component {
           <i className='iconfont icon-back' onClick={() => history.go(-1)}></i>
           <SearchHeader cityName={currentCityName} className='searchHeader' />
         </div>
+        <Filter />
       </div>
     )
   }
