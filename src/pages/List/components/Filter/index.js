@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FilterTitle from '../FilterTitle'
 import FilterMore from '../FilterMore'
 import FilterPicker from '../FilterPicker'
+import { Spring, animated } from 'react-spring'
 import axios from 'axios'
 import './index.scss'
 
@@ -27,8 +28,10 @@ export default class Filter extends Component {
   }
 
   componentDidMount() {
+    this.htmlBody = document.body
     this.getFiltersData()
   }
+
   // 获取所有筛选条件的方法
   getFiltersData = async () => {
     const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
@@ -40,6 +43,7 @@ export default class Filter extends Component {
 
   // 点击标题菜单实现高亮
   onTitleClick = (type) => {
+    this.htmlBody.classList.add('body-fixed')
     const { selectedValues, titleSelectedStatus } = this.state
     // 创建新的标题
     const newTitleSelectedStatus = { ...titleSelectedStatus }
@@ -71,6 +75,7 @@ export default class Filter extends Component {
 
   // 取消
   onCancel = (value, type) => {
+    this.htmlBody.classList.remove('body-fixed')
     // 菜单高亮逻辑处理
     const { selectedValues, titleSelectedStatus } = this.state
     // 创建新的标题
@@ -78,7 +83,9 @@ export default class Filter extends Component {
     const selectedValue = selectedValues[type]
     if (type === 'area') {
       newTitleSelectedStatus[type] =
-      selectedValue[0] === 'area' && selectedValue[1] === 'null' ? false : true
+        selectedValue[0] === 'area' && selectedValue[1] === 'null'
+          ? false
+          : true
     } else if (type === 'mode' || type === 'price') {
       newTitleSelectedStatus[type] = selectedValue[0] === 'null' ? false : true
     } else if (type === 'more') {
@@ -86,12 +93,13 @@ export default class Filter extends Component {
     }
     this.setState({
       openType: '',
-      titleSelectedStatus: newTitleSelectedStatus
+      titleSelectedStatus: newTitleSelectedStatus,
     })
   }
 
   // 确定
   onSave = (value, type) => {
+    this.htmlBody.classList.remove('body-fixed')
     // 菜单高亮逻辑处理
     const { titleSelectedStatus } = this.state
     // 创建新的标题
@@ -99,7 +107,9 @@ export default class Filter extends Component {
     const selectedValue = value
     if (type === 'area') {
       newTitleSelectedStatus[type] =
-      selectedValue[0] === 'area' && selectedValue[1] === 'null' ? false : true
+        selectedValue[0] === 'area' && selectedValue[1] === 'null'
+          ? false
+          : true
     } else if (type === 'mode' || type === 'price') {
       newTitleSelectedStatus[type] = selectedValue[0] === 'null' ? false : true
     } else if (type === 'more') {
@@ -114,9 +124,10 @@ export default class Filter extends Component {
     const { area, mode, price, more } = newSelectedValues
     const filters = {}
     // 区域
-    let newArea = area.filter(item => item !== null && item !== 'null')
+    let newArea = area.filter((item) => item !== null && item !== 'null')
     const areaKey = area[0]
-    const areaValue = newArea.length === 1 ? 'null' : newArea[newArea.length - 1]
+    const areaValue =
+      newArea.length === 1 ? 'null' : newArea[newArea.length - 1]
     filters[areaKey] = areaValue
     // 方式+组件
     filters.mode = mode[0]
@@ -128,7 +139,7 @@ export default class Filter extends Component {
     this.setState({
       openType: '',
       selectedValues: newSelectedValues,
-      titleSelectedStatus: newTitleSelectedStatus
+      titleSelectedStatus: newTitleSelectedStatus,
     })
   }
 
@@ -197,26 +208,43 @@ export default class Filter extends Component {
     )
   }
 
+  // 渲染遮罩层
+  renderMask = () => {
+    const { openType } = this.state
+    if(!['area', 'mode', 'price'].includes(openType)) return null
+
+    return (
+      // 使用react-spring库里面Spring组件包裹需要动画的dom元素
+      // 需要动画的元素在Spring组件里面的回调函数的返回值展示
+      // render-props:组件里面传一个回调函数，Spring组件里面调用该回调函数并传递参数
+      // 需要动画的dom元素是div元素，现在需要写成animated.div这种形式
+      <Spring
+        from={{ opacity: 0 }}
+        to={{ opacity: 1 }}
+      >
+        {(styles) => (
+          <animated.div
+            className="mask"
+            style={styles}
+            onClick={() => this.onCancel(null, openType)}
+          ></animated.div>
+        )}
+      </Spring>
+    )
+  }
+
   render() {
-    const { titleSelectedStatus, openType } = this.state
+    const { titleSelectedStatus } = this.state
     return (
       <div className="filter">
-        <div
-          className="mask"
-          style={{
-            display: ['area', 'mode', 'price'].includes(openType) ? '' : 'none',
-          }}
-          onClick={() => this.onCancel(null, openType)}
-        ></div>
+        {this.renderMask()}
 
         <div className="content">
           <FilterTitle
             titleSelectedStatus={titleSelectedStatus}
             onClick={this.onTitleClick}
           />
-
           {this.renderFilterPicker()}
-
           {this.renderFilterMore()}
         </div>
       </div>

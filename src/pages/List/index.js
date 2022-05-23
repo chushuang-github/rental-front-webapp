@@ -52,6 +52,8 @@ export default class HouseList extends Component {
   onFilter = (filters) => {
     this.filters = filters
     this.searchHouseList()
+    // 页面回到顶部
+    window.scrollTo(0, 0)
   }
 
   searchHouseList = async () => {

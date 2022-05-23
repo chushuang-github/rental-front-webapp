@@ -47,7 +47,7 @@ export default class Home extends Component {
   
   render() {
     return (
-      <div style={{ paddingBottom: '50px', height: '100%' }}>
+      <div style={{ paddingBottom: '50px' }}>
         <Switch>
           <Route path='/home' exact component={Index} />
           <Route path='/home/list' component={List} />

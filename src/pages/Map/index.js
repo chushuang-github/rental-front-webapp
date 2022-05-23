@@ -4,7 +4,6 @@ import HouseItem from '../../components/HouseItem'
 import { Link } from 'react-router-dom'
 import { Toast } from 'antd-mobile'
 import axios from 'axios'
-import { BASE_URL } from '../../utils/url'
 import './index.scss'
 
 // 覆盖物样式
