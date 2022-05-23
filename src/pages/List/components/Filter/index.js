@@ -105,13 +105,29 @@ export default class Filter extends Component {
     } else if (type === 'more') {
       newTitleSelectedStatus[type] = selectedValue.length > 0 ? 'true' : false
     }
+    // 最新的筛选数据
+    const newSelectedValues = {
+      ...this.state.selectedValues,
+      [type]: value,
+    }
+    // 接口需要的筛选条件数据
+    const { area, mode, price, more } = newSelectedValues
+    const filters = {}
+    // 区域
+    let newArea = area.filter(item => item !== null && item !== 'null')
+    const areaKey = area[0]
+    const areaValue = newArea.length === 1 ? 'null' : newArea[newArea.length - 1]
+    filters[areaKey] = areaValue
+    // 方式+组件
+    filters.mode = mode[0]
+    filters.price = price[0]
+    // 更多筛选
+    filters.more = more.join()
+    this.props.onFilter(filters)
 
     this.setState({
       openType: '',
-      selectedValues: {
-        ...this.state.selectedValues,
-        [type]: value,
-      },
+      selectedValues: newSelectedValues,
       titleSelectedStatus: newTitleSelectedStatus
     })
   }
