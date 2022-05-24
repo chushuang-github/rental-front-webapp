@@ -31,7 +31,7 @@ export default class HouseList extends Component {
     currentCityId: '',
     list: [],
     count: 0,
-    isLoading: false
+    isLoading: false,
   }
   // 城市列表的查询条件
   filters = {}
@@ -76,7 +76,7 @@ export default class HouseList extends Component {
     this.setState({
       count,
       list,
-      isLoading: false
+      isLoading: false,
     })
     Toast.clear()
     if (count > 0) {
@@ -134,7 +134,14 @@ export default class HouseList extends Component {
       )
     }
     // 传给HouseItem组件的style属性，在HouseItem组件的根标签上面要使用一下
-    return <HouseItem key={key} style={style} item={house} />
+    return (
+      <HouseItem 
+        key={key} 
+        style={style} 
+        item={house} 
+        onClick={() => this.props.history.push(`/detail/${house.houseCode}`)} 
+      />
+    )
   }
 
   renderList = () => {

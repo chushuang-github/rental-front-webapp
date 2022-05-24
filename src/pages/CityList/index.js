@@ -9,7 +9,7 @@ import './index.scss'
 export default class CityList extends Component {
   state = {
     cityList: {},
-    cityIndex: []
+    cityIndex: [],
   }
   componentDidMount() {
     this.getCityList()
@@ -38,7 +38,7 @@ export default class CityList extends Component {
 
     this.setState({
       cityList,
-      cityIndex
+      cityIndex,
     })
     Toast.clear()
   }
@@ -46,13 +46,13 @@ export default class CityList extends Component {
   changeCity = ({ label, value }) => {
     // 有房源的城市
     const arr = ['北京', '广州', '上海', '深圳']
-    if(arr.includes(label)) {
-      localStorage.setItem('hkzf_city', JSON.stringify({label, value}))
+    if (arr.includes(label)) {
+      localStorage.setItem('hkzf_city', JSON.stringify({ label, value }))
       this.props.history.go(-1)
-    }else {
+    } else {
       Toast.show({
-        content: "该城市暂无房源数据",
-        duration: 1000
+        content: '该城市暂无房源数据',
+        duration: 1000,
       })
     }
   }
@@ -65,7 +65,7 @@ export default class CityList extends Component {
 
         <div style={{ height: window.innerHeight - 45 }}>
           <IndexBar sticky={false}>
-            {cityIndex.map(group => {
+            {cityIndex.map((group) => {
               const list = cityList[group]
               return (
                 <IndexBar.Panel
@@ -79,7 +79,9 @@ export default class CityList extends Component {
                         arrow={false}
                         key={item.value}
                         onClick={() => this.changeCity(item)}
-                      >{item.label}</List.Item>
+                      >
+                        {item.label}
+                      </List.Item>
                     ))}
                   </List>
                 </IndexBar.Panel>

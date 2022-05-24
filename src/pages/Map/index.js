@@ -14,13 +14,13 @@ const labelStyle = {
   whiteSpace: 'nowrap',
   fontSize: '12px',
   color: 'rgb(255, 255, 255)',
-  textAlign: 'center'
+  textAlign: 'center',
 }
 
 export default class Map extends Component {
   state = {
     houseList: [],
-    isShowList: false
+    isShowList: false,
   }
   componentDidMount() {
     this.initMap()
@@ -32,12 +32,14 @@ export default class Map extends Component {
   // 初始化地图
   initMap = () => {
     // 获取当前城市
-    const { label: position, value: areaId } = JSON.parse(localStorage.getItem('hkzf_city'))
+    const { label: position, value: areaId } = JSON.parse(
+      localStorage.getItem('hkzf_city')
+    )
     // 下面配置在百度地图开发平台中都可以查到
     // 初始化地图实例
     // index.html文件中通过script标签引入了一个js文件，所以全局是有BMapGL对象的
     // 全局对象是挂载在window身上的，react脚手架里面全局对象需要通过window使用
-    const map = new window.BMapGL.Map("container")
+    const map = new window.BMapGL.Map('container')
     this.map = map
     // 设置中心点坐标
     // const point = new window.BMapGL.Point(116.404, 39.915)
@@ -47,31 +49,35 @@ export default class Map extends Component {
     // 创建地址解析器实例 (正/逆地址解析)
     const myGeo = new window.BMapGL.Geocoder()
     // 将地址解析结果显示在地图上，并调整地图视野
-    myGeo.getPoint(position, async (point) => {
-      if(point){
-        map.centerAndZoom(point, 11)
+    myGeo.getPoint(
+      position,
+      async (point) => {
+        if (point) {
+          map.centerAndZoom(point, 11)
 
-        // 添加地图控件
-        // 开启鼠标滚轮缩放
-        map.enableScrollWheelZoom(true)
-        // 添加比例尺控件
-        const scaleCtrl = new window.BMapGL.ScaleControl()
-        map.addControl(scaleCtrl)
-        // 添加缩放控件
-        const zoomCtrl = new window.BMapGL.ZoomControl()
-        map.addControl(zoomCtrl)
+          // 添加地图控件
+          // 开启鼠标滚轮缩放
+          map.enableScrollWheelZoom(true)
+          // 添加比例尺控件
+          const scaleCtrl = new window.BMapGL.ScaleControl()
+          map.addControl(scaleCtrl)
+          // 添加缩放控件
+          const zoomCtrl = new window.BMapGL.ZoomControl()
+          map.addControl(zoomCtrl)
 
-        // 调用renderOverlays方法
-        this.renderOverlays(areaId)
-      }
-    }, position)
+          // 调用renderOverlays方法
+          this.renderOverlays(areaId)
+        }
+      },
+      position
+    )
 
     // 监听地图moveStart事件，在地图移动的时候，隐藏房源列表
     this.map.addEventListener('movestart', () => {
-      if(this.state.isShowList) {
+      if (this.state.isShowList) {
         this.setState({
           houseList: [],
-          isShowList: false
+          isShowList: false,
         })
       }
     })
@@ -90,15 +96,15 @@ export default class Map extends Component {
       const res = await axios.get(`/area/map?id=${id}`)
       Toast.clear()
       const data = res.body
-  
+
       // 获取地图的缩放级别和类型
       const { nextZoom, type } = this.getTypeAndZoom()
-  
-      data.forEach(item => {
+
+      data.forEach((item) => {
         // 创建覆盖物
         this.createOverlays(item, nextZoom, type)
       })
-    } catch(err) {
+    } catch (err) {
       Toast.clear()
     }
   }
@@ -113,41 +119,41 @@ export default class Map extends Component {
     // 下一级的缩放级别 和 当前级别的类型
     let nextZoom, type
 
-    if(zoom >= 10 && zoom < 12) {
+    if (zoom >= 10 && zoom < 12) {
       // 区
       nextZoom = 13
       type = 'circle'
-    }else if(zoom >= 12 && zoom < 14) {
+    } else if (zoom >= 12 && zoom < 14) {
       // 镇
       nextZoom = 15
       type = 'circle'
-    } else if(zoom >= 14 && zoom < 16) {
+    } else if (zoom >= 14 && zoom < 16) {
       // 小区
       type = 'rect'
     }
 
     return {
       nextZoom,
-      type
+      type,
     }
   }
 
   // 创建覆盖物：根据传入的类型等相关的数据，调用相应的方法创建覆盖物，并提供参数
   createOverlays = (data, nextZoom, type) => {
     // 数据：longitude经度，latitude纬度
-    const { 
+    const {
       coord: { longitude, latitude },
       label: areaName,
       count,
-      value: areaId
+      value: areaId,
     } = data
     // 地图坐标
     const areaPoint = new window.BMapGL.Point(longitude, latitude)
 
-    if(type === 'circle') {
+    if (type === 'circle') {
       // 区、镇
       this.createCircle(areaPoint, areaName, count, areaId, nextZoom)
-    }else {
+    } else {
       // 小区
       this.createRect(areaPoint, areaName, count, areaId)
     }
@@ -160,7 +166,7 @@ export default class Map extends Component {
       // 指定文本标注所在的地理位置
       position: areaPoint,
       // 设置文本偏移量
-      offset: new window.BMapGL.Size(-35, -35)
+      offset: new window.BMapGL.Size(-35, -35),
     }
     const label = new window.BMapGL.Label('', opts)
     // 给label对象添加一个唯一标识(后面点击的时候需要区分点击的是哪一个)
@@ -192,7 +198,7 @@ export default class Map extends Component {
       // 指定文本标注所在的地理位置
       position: areaPoint,
       // 设置文本偏移量
-      offset: new window.BMapGL.Size(-50, -28)
+      offset: new window.BMapGL.Size(-50, -28),
     }
     const label = new window.BMapGL.Label('', opts)
     // 给label对象添加一个唯一标识(后面点击的时候需要区分点击的是哪一个)
@@ -238,34 +244,39 @@ export default class Map extends Component {
       Toast.clear()
       this.setState({
         houseList: res.body.list,
-        isShowList: true
+        isShowList: true,
       })
-    } catch(err) {
+    } catch (err) {
       Toast.clear()
     }
   }
 
-
   render() {
-    const { houseList, isShowList} = this.state
+    const { houseList, isShowList } = this.state
     return (
-      <div className='map'>
+      <div className="map">
         <NavHeader title="地图找房" />
         <div id="container"></div>
 
         {/* 房源列表 */}
         <div className={['houseList', isShowList ? 'show' : ''].join(' ')}>
-          <div className='titleWrap'>
-            <h1 className='listTitle'>房屋列表</h1>
-            <Link className='titleMore' to='/home/list'>更多房源</Link>
+          <div className="titleWrap">
+            <h1 className="listTitle">房屋列表</h1>
+            <Link className="titleMore" to="/home/list">
+              更多房源
+            </Link>
           </div>
 
-          <div className='houseItems'>
-            {
-              houseList.map(item => (
-                <HouseItem item={item} />
-              ))
-            }
+          <div className="houseItems">
+            {houseList.map((item) => (
+              <HouseItem
+                item={item}
+                key={item.houseCode}
+                onClick={() =>
+                  this.props.history.push(`/detail/${item.houseCode}`)
+                }
+              />
+            ))}
           </div>
         </div>
       </div>

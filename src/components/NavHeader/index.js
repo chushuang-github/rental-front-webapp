@@ -17,9 +17,12 @@ class NavHeader extends Component {
     onLeftClick ? onLeftClick() : this.props.history.go(-1)
   }
   render() {
+    const { className, right, isShow } = this.props
     return (
-      <div style={{ height: '45px' }}>
-        <NavBar onBack={this.onBack}>{this.props.title}</NavBar>
+      <div style={{ height: isShow ? '' : '45px' }}>
+        <NavBar onBack={this.onBack} className={className} right={right}>
+          {this.props.title}
+        </NavBar>
       </div>
     )
   }
