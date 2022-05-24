@@ -1,0 +1,35 @@
+.register {
+  .register-nav-header {
+    background-color: #fff;
+  }
+  .register-content {
+    padding: 0px 20px;
+    margin-top: 20px;
+    .form-item {
+      position: relative;
+      margin-top: 10px;
+      height: 60px;
+      .input {
+        border-bottom: 2px solid #eee;
+      }
+    }
+    .error {
+      position: absolute;
+      color: red;
+    }
+    .form-submit {
+      margin-top: 20px;
+    }
+  }
+  .back-home {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+    margin-top: 20px;
+    font-size: 13px;
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+  }
+}

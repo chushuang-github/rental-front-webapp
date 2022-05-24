@@ -27,3 +27,14 @@ ul {
 .ReactVirtualized__Grid {
   padding-bottom: 50px;
 }
+
+input {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 45px;
+  font-size: 16px;
+  ::placeholder {
+    color: #c0c0c0;
+  }
+}
