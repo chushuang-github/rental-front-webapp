@@ -7,6 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 // 使用yup库添加表单验证规则
 import * as yup from 'yup'
 import axios from 'axios'
+import { setToken } from '../../utils/auth'
 import './index.scss'
 
 // 验证的正则表达式 (字母、数字和下划线，并指定位数)
@@ -55,9 +56,8 @@ export default class Register extends Component {
                 password,
               })
               const { status, description, body } = res
-              console.log(res)
               if (status === 200) {
-                localStorage.setItem('hkzf_token', body.token)
+                setToken(body.token)
                 this.props.history.push('/home/profile')
               } else {
                 Toast.show({

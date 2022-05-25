@@ -8,6 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 import axios from 'axios'
 import './index.scss'
+import { setToken } from '../../utils/auth'
 
 // 验证的正则表达式 (字母、数字和下划线，并指定位数)
 const reg_username = /^[a-zA-Z_\d]{5,8}$/
@@ -34,6 +35,7 @@ export default class Login extends Component {
                   '长度为5-12位，格式为数字、字母、下划线'
                 ),
             })}
+            // 登录功能函数
             onSubmit={async (values) => {
               const { username, password } = values
               const res = await axios.post('/user/login', {
@@ -42,8 +44,10 @@ export default class Login extends Component {
               })
               const { status, description, body } = res
               if (status === 200) {
-                localStorage.setItem('hkzf_token', body.token)
-                this.props.history.push('/home/profile')
+                setToken(body.token)
+                // 被AuthRoute组件打回到登录页面，参数里面的state是有值的
+                const url = this.props.location.state?.from.pathname
+                this.props.history.replace(url || '/home/profile')
               } else {
                 Toast.show({
                   content: description,

@@ -6,6 +6,7 @@ import Map from './pages/Map'
 import HouseDetail from './pages/HouseDetail'
 import Login from './pages/Login'
 import Register from './pages/Register'
+// import AuthRoute from './components/AuthRoute'
 
 export default class App extends Component {
   render() {
@@ -15,6 +16,8 @@ export default class App extends Component {
           <Switch>
             <Route path='/home' component={Home} />
             <Route path='/citylist' component={CityList} />
+            {/* /map路由页面如果需要登录后才能进入的，就使用封装的AuthRoute鉴权路由 */}
+            {/* <AuthRoute path='/map' component={Map} /> */}
             <Route path='/map' component={Map} />
             <Route path='/detail/:id' component={HouseDetail} />
             <Route path='/login' component={Login} />
