@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import NavHeader from '../../components/NavHeader'
 import HousePackage from '../../components/HousePackage'
 import HouseItem from '../../components/HouseItem'
-import { Swiper, Image, Grid } from 'antd-mobile'
+import { Swiper, Image, Grid, Modal, Toast } from 'antd-mobile'
 import { BASE_URL } from '../../utils/url'
 import axios from 'axios'
+import { isAuth } from '../../utils/auth'
 import './index.scss'
 
 // 猜你喜欢
@@ -84,11 +85,28 @@ export default class HouseDetail extends Component {
       // 房屋描述
       description: '',
     },
+    // 是否收藏
+    isFavorite: false,
+    visible: false
   }
 
   componentDidMount() {
     window.scrollTo(0, 0)
     this.getHouseDetail()
+    this.checkFavorite()
+  }
+
+  // 查看房源是否收藏
+  checkFavorite = async () => {
+    if(!isAuth()) return
+    const { id } = this.props.match.params
+    const res = await axios.get(`/user/favorites/${id}`)
+    if(res.status === 200) {
+      const { isFavorite } = res.body
+      this.setState({
+        isFavorite
+      })
+    }
   }
 
   // 获取房源数据
@@ -145,8 +163,50 @@ export default class HouseDetail extends Component {
     map.addOverlay(label)
   }
 
+  handleFavorite = async () => {
+    if(!isAuth()) {
+      // 未登录
+      this.setState({ visible: true })
+      return
+    }
+    // 已经登录
+    const { isFavorite } = this.state
+    const { id } = this.props.match.params
+    if(isFavorite) {
+      // 已收藏，调用取消收藏接口
+      const res = await axios.delete(`/user/favorites/${id}`)
+      this.setState({ isFavorite: false })
+      if(res.status === 200) {
+        Toast.show({
+          content: '已取消收藏',
+          duration: 1000
+        })
+      }else {
+        Toast.show({
+          content: '登录超时，请重新登录',
+          duration: 1000
+        })
+      }
+    }else {
+      // 未收藏，调用收藏接口
+      const res = await axios.post(`/user/favorites/${id}`)
+      if(res.status === 200) {
+        this.setState({ isFavorite: true })
+        Toast.show({
+          content: '收藏成功',
+          duration: 1000
+        })
+      }else {
+        Toast.show({
+          content: '登录超时，请重新登录',
+          duration: 1000
+        })
+      }
+    }
+  }
+
   render() {
-    const { houseInfo } = this.state
+    const { houseInfo, isFavorite, visible } = this.state
     return (
       <div className="house-detail">
         {/* 导航栏 */}
@@ -273,12 +333,42 @@ export default class HouseDetail extends Component {
 
         {/* 底部收藏按钮 */}
         <Grid columns={3} className="fixedBottom">
-          <Grid.Item>收藏</Grid.Item>
+          <Grid.Item onClick={this.handleFavorite}>
+            <img 
+              src={isFavorite ? `${BASE_URL}/img/star.png` : `${BASE_URL}/img/unstar.png`} 
+              className='favoriteImg' 
+              alt='收藏'
+            />
+            <span className='favorite'>{isFavorite ? '已收藏' : '收藏'}</span>
+          </Grid.Item>
           <Grid.Item>在线咨询</Grid.Item>
           <Grid.Item>
             <span className="telephone">电话预约</span>
           </Grid.Item>
         </Grid>
+
+        <Modal
+          visible={visible}
+          content='登录后才能收藏房源，是否去登录？'
+          closeOnMaskClick={true}
+          onClose={() => {
+            this.setState({
+              visible: false
+            })
+          }}
+          actions={[
+            {
+              key: 'confirm',
+              text: '去登录',
+              onClick: () => {
+                this.props.history.push({
+                  pathname: '/login',
+                  state: { from: this.props.location }
+                })
+              }
+            },
+          ]}
+        />
       </div>
     )
   }
