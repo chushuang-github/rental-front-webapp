@@ -361,7 +361,7 @@ export default class HouseDetail extends Component {
               key: 'confirm',
               text: '去登录',
               onClick: () => {
-                this.props.history.push({
+                this.props.history.replace({
                   pathname: '/login',
                   state: { from: this.props.location }
                 })

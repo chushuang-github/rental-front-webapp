@@ -1,0 +1,85 @@
+.rent-add {
+  padding-bottom: 80px;
+  .adm-list-header {
+    color: #21b97a;
+    background-color: #fff;
+    font-size: 15px; 
+  }
+  .adm-list-body {
+    --active-background-color: #fff;
+  }
+  .adm-list-item-content-main {
+    color: #333;
+    font-size: 14px;
+    span {
+      display: inline-block;
+      width: 90px;
+      font-size: 14px;
+      i {
+        width: 1em;
+        display: inline-block;
+      }
+    }
+    input {
+      width: 150px;
+      height: 20px;
+      line-height: 1;
+      &::placeholder {
+        color: #bbb;
+        font-size: 14px;
+      }
+    }
+  }
+  .adm-list-item-content-extra {
+    font-size: 14px;
+  }
+  .house-title {
+    input {
+      font-size: 14px;
+      width: 80%;
+    }
+  }
+  .house-picture {
+    .adm-image-uploader-upload-button-icon {
+      font-size: 30px;
+    }
+    .upload-img {
+      padding: 10px;
+    }
+  }
+  .house-desc {
+    .adm-text-area {
+      textarea {
+        color: #333;
+        font-size: 14px;
+        height: 80px;
+        &::placeholder {
+          color: #bbb;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  .house-btn {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 45px;
+    z-index: 1;
+    color: #fff;
+    font-size: 15px;
+    background-color: #fff;
+    .cancel {
+      color: #21b97a;
+      background-color: #fff;
+      height: 100%;
+      line-height: 45px;
+    }
+    .confirm {
+      height: 45px;
+      line-height: 45px;
+      background-color: #21b97a;
+    }
+  }
+}

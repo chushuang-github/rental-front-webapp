@@ -6,20 +6,20 @@ import { Toast } from 'antd-mobile'
 import axios from 'axios'
 import './index.scss'
 
-export default class Favorite extends Component {
+export default class Rent extends Component {
   state = {
     list: [],
   }
   componentDidMount() {
-    this.getFavoriteList()
+    this.getRentList()
   }
-  getFavoriteList = async () => {
+  getRentList = async () => {
     Toast.show({
       duration: 0,
       icon: 'loading',
       content: '加载中…',
     })
-    const res = await axios.get('/user/favorites')
+    const res = await axios.get('/user/houses')
     Toast.clear()
     if (res.status === 200) {
       this.setState({
@@ -41,9 +41,9 @@ export default class Favorite extends Component {
     const { list } = this.state
     const { history } = this.props
     return (
-      <div className="favorite">
-        <NavHeader title="我的收藏" />
-        <div className="favorite-list">
+      <div className="rent">
+        <NavHeader title="房屋管理" />
+        <div className="rent-list">
           {list.length > 0 ? (
             list.map((item) => (
               <HouseItem
@@ -54,14 +54,14 @@ export default class Favorite extends Component {
             ))
           ) : (
             <NoHouse>
-              暂无数据，去
+              您还没有房源，
               <span
                 className="find-house"
                 onClick={() => {
-                  history.push('/home/list')
+                  history.push('/rent/add')
                 }}
               >
-                找房子
+                去发布房源
               </span>
               吧~
             </NoHouse>

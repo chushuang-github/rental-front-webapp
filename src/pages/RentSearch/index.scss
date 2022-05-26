@@ -1,0 +1,24 @@
+.rent-search {
+  .search-bar {
+    background-color: #f6f5f5;
+    padding: 8px;
+    .adm-search-bar {
+      --background: #fff;
+    }
+    .adm-search-bar-active .adm-search-bar-input-box {
+      border-color: #fff;
+    }
+  }
+  .search-list {
+    .tip {
+      height: 45px;
+      line-height: 45px;
+      color: #333;
+      padding-left: 15px;
+      border-bottom: 1px solid #f1f1f1;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}
